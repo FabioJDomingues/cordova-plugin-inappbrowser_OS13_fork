@@ -62,21 +62,9 @@ static CDVWKInAppBrowser* instance = nil;
     _waitForBeforeload = NO;
 }
 
-- (void)onReset
-{
-    [self close:nil];
-}
+//- (void)onReset{[self close:nil];}
 
-- (void)close:(CDVInvokedUrlCommand*)command
-{
-    if (self.inAppBrowserViewController == nil) {
-        NSLog(@"IAB.close() called but it was already closed.");
-        return;
-    }
-    
-    // Things are cleaned up in browserExit.
-    [self.inAppBrowserViewController close];
-}
+//- (void)close:(CDVInvokedUrlCommand*)command{if (self.inAppBrowserViewController == nil) {NSLog(@"IAB.close() called but it was already closed.");return;}// Things are cleaned up in browserExit.[self.inAppBrowserViewController close];}
 
 - (BOOL) isSystemUrl:(NSURL*)url
 {
@@ -173,7 +161,7 @@ static CDVWKInAppBrowser* instance = nil;
     [self.inAppBrowserViewController showToolBar:browserOptions.toolbar :browserOptions.toolbarposition];
     if (browserOptions.closebuttoncaption != nil || browserOptions.closebuttoncolor != nil) {
         int closeButtonIndex = browserOptions.lefttoright ? (browserOptions.hidenavigationbuttons ? 1 : 4) : 0;
-        [self.inAppBrowserViewController setCloseButtonTitle:browserOptions.closebuttoncaption :browserOptions.closebuttoncolor :closeButtonIndex];
+        //[self.inAppBrowserViewController setCloseButtonTitle:browserOptions.closebuttoncaption :browserOptions.closebuttoncolor :closeButtonIndex];
     }
     // Set Presentation Style
     UIModalPresentationStyle presentationStyle = UIModalPresentationFullScreen; // default
@@ -758,8 +746,8 @@ BOOL isExiting = FALSE;
     self.spinner.userInteractionEnabled = NO;
     [self.spinner stopAnimating];
     
-    self.closeButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:nil action:nil];
-    self.closeButton.enabled = NO;
+    //self.closeButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:nil action:nil];
+    //self.closeButton.enabled = NO;
     
     UIBarButtonItem* flexibleSpaceButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil];
     
@@ -882,21 +870,21 @@ BOOL isExiting = FALSE;
     [self.webView setFrame:frame];
 }
 
-- (void)setCloseButtonTitle:(NSString*)title : (NSString*) colorString : (int) buttonIndex
-{
+//- (void)setCloseButtonTitle:(NSString*)title : (NSString*) colorString : (int) buttonIndex
+//{
     // the advantage of using UIBarButtonSystemItemDone is the system will localize it for you automatically
     // but, if you want to set this yourself, knock yourself out (we can't set the title for a system Done button, so we have to create a new one)
-    self.closeButton = nil;
+    //self.closeButton = nil;
     // Initialize with title if title is set, otherwise the title will be 'Done' localized
-    self.closeButton = title != nil ? [[UIBarButtonItem alloc] initWithTitle:title style:UIBarButtonItemStyleBordered target:nil action:nil] : [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:nil action:nil];
-    self.closeButton.enabled = NO;
+    //self.closeButton = title != nil ? [[UIBarButtonItem alloc] initWithTitle:title style:UIBarButtonItemStyleBordered target:nil action:nil] : [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:nil action:nil];
+    //self.closeButton.enabled = NO;
     // If color on closebutton is requested then initialize with that that color, otherwise use initialize with default
-    self.closeButton.tintColor = colorString != nil ? [self colorFromHexString:colorString] : [UIColor colorWithRed:60.0 / 255.0 green:136.0 / 255.0 blue:230.0 / 255.0 alpha:1];
+    //self.closeButton.tintColor = colorString != nil ? [self colorFromHexString:colorString] : [UIColor colorWithRed:60.0 / 255.0 green:136.0 / 255.0 blue:230.0 / 255.0 alpha:1];
     
-    NSMutableArray* items = [self.toolbar.items mutableCopy];
-    [items replaceObjectAtIndex:buttonIndex withObject:self.closeButton];
-    [self.toolbar setItems:items];
-}
+    //NSMutableArray* items = [self.toolbar.items mutableCopy];
+    //[items replaceObjectAtIndex:buttonIndex withObject:self.closeButton];
+    //[self.toolbar setItems:items];
+//}
 
 - (void)showLocationBar:(BOOL)show
 {
@@ -1033,23 +1021,7 @@ BOOL isExiting = FALSE;
     return NO;
 }
 
-- (void)close
-{
-    self.currentURL = nil;
-    
-    __weak UIViewController* weakSelf = self;
-    
-    // Run later to avoid the "took a long time" log message.
-    dispatch_async(dispatch_get_main_queue(), ^{
-        isExiting = TRUE;
-        lastReducedStatusBarHeight = 0.0;
-        if ([weakSelf respondsToSelector:@selector(presentingViewController)]) {
-            [[weakSelf presentingViewController] dismissViewControllerAnimated:YES completion:nil];
-        } else {
-            [[weakSelf parentViewController] dismissViewControllerAnimated:YES completion:nil];
-        }
-    });
-}
+//- (void)close{self.currentURL = nil;__weak UIViewController* weakSelf = self;// Run later to avoid the "took a long time" log message.dispatch_async(dispatch_get_main_queue(), ^{isExiting = TRUE;lastReducedStatusBarHeight = 0.0;if ([weakSelf respondsToSelector:@selector(presentingViewController)]) {[[weakSelf presentingViewController] dismissViewControllerAnimated:YES completion:nil];} else {[[weakSelf parentViewController] dismissViewControllerAnimated:YES completion:nil];}})}
 
 - (void)navigateTo:(NSURL*)url
 {
