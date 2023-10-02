@@ -162,8 +162,7 @@ static CDVWKInAppBrowser* instance = nil;
     
     [self.inAppBrowserViewController showLocationBar:browserOptions.location];
     [self.inAppBrowserViewController showToolBar:browserOptions.toolbar :browserOptions.toolbarposition];
-      //if (browserOptions.closebuttoncaption != nil || browserOptions.closebuttoncolor != nil) {
-    if (browserOptions.closebuttoncaption.hidden != NO || browserOptions.closebuttoncolor != nil) {
+      if (browserOptions.closebuttoncaption != nil || browserOptions.closebuttoncolor != nil) {
         int closeButtonIndex = browserOptions.lefttoright ? (browserOptions.hidenavigationbuttons ? 1 : 4) : 0;
         [self.inAppBrowserViewController setCloseButtonTitle:browserOptions.closebuttoncaption :browserOptions.closebuttoncolor :closeButtonIndex];
     }
@@ -750,11 +749,9 @@ BOOL isExiting = FALSE;
     self.spinner.userInteractionEnabled = NO;
     [self.spinner stopAnimating];
     
-    //self.closeButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:nil action:nil];
-    //self.closeButton.enabled = NO;
-
-    self.closeButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:nil target:nil action:nil];
+    self.closeButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:nil action:nil];
     self.closeButton.enabled = NO;
+
     
     UIBarButtonItem* flexibleSpaceButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil];
     
@@ -877,26 +874,11 @@ BOOL isExiting = FALSE;
     [self.webView setFrame:frame];
 }
 
-//- (void)setCloseButtonTitle:(NSString*)title : (NSString*) colorString : (int) buttonIndex
-//{
-    // the advantage of using UIBarButtonSystemItemDone is the system will localize it for you automatically
-    // but, if you want to set this yourself, knock yourself out (we can't set the title for a system Done button, so we have to create a new one)
-    //self.closeButton = nil;
-    // Initialize with title if title is set, otherwise the title will be 'Done' localized
-    //self.closeButton = title != nil ? [[UIBarButtonItem alloc] initWithTitle:title style:UIBarButtonItemStyleBordered target:nil action:nil] : [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:nil action:nil];
-    //self.closeButton.enabled = NO;
-    // If color on closebutton is requested then initialize with that that color, otherwise use initialize with default
-    //self.closeButton.tintColor = colorString != nil ? [self colorFromHexString:colorString] : [UIColor colorWithRed:60.0 / 255.0 green:136.0 / 255.0 blue:230.0 / 255.0 alpha:1];
-    
-    //NSMutableArray* items = [self.toolbar.items mutableCopy];
-    //[items replaceObjectAtIndex:buttonIndex withObject:self.closeButton];
-    //[self.toolbar setItems:items];
-//}
-- (void)setCloseButtonTitle:(BOOL)show : (NSString*) colorString : (int) buttonIndex
+- (void)setCloseButtonTitle:(NSString*)title : (NSString*) colorString : (int) buttonIndex
 {
     // the advantage of using UIBarButtonSystemItemDone is the system will localize it for you automatically
     // but, if you want to set this yourself, knock yourself out (we can't set the title for a system Done button, so we have to create a new one)
-    self.closeButton.hidden = NO;
+    self.closeButton = nil;
     // Initialize with title if title is set, otherwise the title will be 'Done' localized
     self.closeButton = title != nil ? [[UIBarButtonItem alloc] initWithTitle:title style:UIBarButtonItemStyleBordered target:nil action:nil] : [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:nil action:nil];
     self.closeButton.enabled = NO;
@@ -904,9 +886,10 @@ BOOL isExiting = FALSE;
     self.closeButton.tintColor = colorString != nil ? [self colorFromHexString:colorString] : [UIColor colorWithRed:60.0 / 255.0 green:136.0 / 255.0 blue:230.0 / 255.0 alpha:1];
     
     NSMutableArray* items = [self.toolbar.items mutableCopy];
-    [items replaceObjectAtIndex:buttonIndex withObject:self.closeButton.hidden];
+    [items replaceObjectAtIndex:buttonIndex withObject:self.closeButton];
     [self.toolbar setItems:items];
 }
+
 
 - (void)showLocationBar:(BOOL)show
 {
