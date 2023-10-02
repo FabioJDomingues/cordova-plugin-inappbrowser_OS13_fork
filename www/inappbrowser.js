@@ -25,7 +25,7 @@
     var modulemapper = require('cordova/modulemapper');
     var urlutil = require('cordova/urlutil');
 
-    function InAppBrowser () {
+    function InAppBrowser() {
         this.channels = {
             'beforeload': channel.create('beforeload'),
             'loadstart': channel.create('loadstart'),
@@ -51,9 +51,7 @@
             strUrl = urlutil.makeAbsolute(strUrl);
             exec(null, null, this.rootName, 'loadAfterBeforeload', [strUrl]);
         },
-        close: function (eventname) {
-            exec(null, null, this.rootName, 'close', []);
-        },
+        //close: function (eventname) {exec(null, null, this.rootName, 'close', []);},
         show: function (eventname) {
             exec(null, null, this.rootName, 'show', []);
         },
@@ -94,55 +92,55 @@
     };
 
     module.exports = {
-      open: function (strUrl, strWindowName, strWindowFeatures, callbacks) {
-        console.log('Started Open');
-          // Don't catch calls that write to existing frames (e.g. named iframes).
-          if (window.frames && window.frames[strWindowName]) {
-              var origOpenFunc = modulemapper.getOriginalSymbol(window, 'open');
-              return origOpenFunc.apply(window, arguments);
-          }
+        open: function (strUrl, strWindowName, strWindowFeatures, callbacks) {
+            console.log('Started Open');
+            // Don't catch calls that write to existing frames (e.g. named iframes).
+            if (window.frames && window.frames[strWindowName]) {
+                var origOpenFunc = modulemapper.getOriginalSymbol(window, 'open');
+                return origOpenFunc.apply(window, arguments);
+            }
 
-          strUrl = urlutil.makeAbsolute(strUrl);
-          var iab = new InAppBrowser();
-          iab.rootName = 'InAppBrowser';
+            strUrl = urlutil.makeAbsolute(strUrl);
+            var iab = new InAppBrowser();
+            iab.rootName = 'InAppBrowser';
 
-          callbacks = callbacks || {};
-          for (var callbackName in callbacks) {
-              iab.addEventListener(callbackName, callbacks[callbackName]);
-          }
+            callbacks = callbacks || {};
+            for (var callbackName in callbacks) {
+                iab.addEventListener(callbackName, callbacks[callbackName]);
+            }
 
-          var cb = function (eventname) {
-              iab._eventHandler(eventname);
-          };
+            var cb = function (eventname) {
+                iab._eventHandler(eventname);
+            };
 
-          strWindowFeatures = strWindowFeatures || '';
+            strWindowFeatures = strWindowFeatures || '';
 
-          exec(cb, cb, 'InAppBrowser', 'open', [strUrl, strWindowName, strWindowFeatures]);
-          return iab;
-      },
-      openSystemBrowser: function (strUrl, strWindowName, strWindowFeatures, callbacks) {
-        if (window.frames && window.frames[strWindowName]) {
-            var origOpenFunc = modulemapper.getOriginalSymbol(window, 'open');
-            return origOpenFunc.apply(window, arguments);
+            exec(cb, cb, 'InAppBrowser', 'open', [strUrl, strWindowName, strWindowFeatures]);
+            return iab;
+        },
+        openSystemBrowser: function (strUrl, strWindowName, strWindowFeatures, callbacks) {
+            if (window.frames && window.frames[strWindowName]) {
+                var origOpenFunc = modulemapper.getOriginalSymbol(window, 'open');
+                return origOpenFunc.apply(window, arguments);
+            }
+
+            strUrl = urlutil.makeAbsolute(strUrl);
+            var iab = new InAppBrowser();
+            iab.rootName = 'SystemInAppBrowser';
+
+            callbacks = callbacks || {};
+            for (var callbackName in callbacks) {
+                iab.addEventListener(callbackName, callbacks[callbackName]);
+            }
+
+            var cb = function (eventname) {
+                iab._eventHandler(eventname);
+            };
+
+            strWindowFeatures = strWindowFeatures || '';
+
+            exec(cb, cb, 'SystemInAppBrowser', 'open', [strUrl, strWindowName, strWindowFeatures]);
+            return iab;
         }
-
-        strUrl = urlutil.makeAbsolute(strUrl);
-        var iab = new InAppBrowser();
-        iab.rootName = 'SystemInAppBrowser';
-
-        callbacks = callbacks || {};
-        for (var callbackName in callbacks) {
-            iab.addEventListener(callbackName, callbacks[callbackName]);
-        }
-
-        var cb = function (eventname) {
-            iab._eventHandler(eventname);
-        };
-
-        strWindowFeatures = strWindowFeatures || '';
-
-        exec(cb, cb, 'SystemInAppBrowser', 'open', [strUrl, strWindowName, strWindowFeatures]);
-        return iab;
-      }
     };
 })();
