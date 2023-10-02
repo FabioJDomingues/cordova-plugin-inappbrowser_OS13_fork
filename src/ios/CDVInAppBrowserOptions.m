@@ -29,7 +29,7 @@
         // default values
         self.location = YES;
         self.toolbar = YES;
-        self.closebuttoncaption = NO;
+        self.closebuttoncaption = nil;
         self.toolbarposition = @"bottom";
         self.cleardata = NO;
         self.clearcache = NO;
@@ -42,7 +42,7 @@
         self.hidden = NO;
         self.disallowoverscroll = NO;
         self.hidenavigationbuttons = NO;
-        self.closebuttoncolor = NO;
+        self.closebuttoncolor = nil;
         self.lefttoright = false;
         self.toolbarcolor = nil;
         self.toolbartranslucent = YES;
