@@ -51,7 +51,9 @@
             strUrl = urlutil.makeAbsolute(strUrl);
             exec(null, null, this.rootName, 'loadAfterBeforeload', [strUrl]);
         },
-        //close: function (eventname) {exec(null, null, this.rootName, 'close', []);},
+        close: function (eventname) {
+            exec(null, null, this.rootName, 'close', []);
+        },
         show: function (eventname) {
             exec(null, null, this.rootName, 'show', []);
         },
